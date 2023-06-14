@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Controls from "./components/Controls";
 import Timer from "./components/Timer";
 
@@ -8,6 +8,8 @@ const App = () => {
   const [label, setLabel] = useState("Session");
   const [timer, setTimer] = useState({ min: 25, sec: 0 });
   const [active, setActive] = useState(false);
+
+  const timerId = useRef(timer);
 
   const handleControls = (event) => {
     if (active) return;
@@ -46,8 +48,39 @@ const App = () => {
     }
   };
 
+  const startTimer = () => {
+    timerId.current = setInterval(() => {
+      setTimer((prev) => {
+        if (prev.sec === 0 && prev.min === 0) {
+          console.log("Beep");
+          if (label === "Session") {
+            setLabel("Break");
+            return { min: breaks, sec: 0 };
+          } else {
+            setLabel("Session");
+            return { min: session, sec: 0 };
+          }
+        } else if (prev.sec === 0 && prev.min > 0) {
+          return { min: prev.min - 1, sec: 59 };
+        } else {
+          return { min: prev.min, sec: prev.sec - 1 };
+        }
+      });
+    }, 1000);
+  };
+
+  const stopTimer = () => {};
+
   useEffect(() => {
-    setTimer({ min: session, sec: "00" });
+    if (active) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+  }, [active]);
+
+  useEffect(() => {
+    setTimer({ min: session, sec: 0 });
   }, [session]);
 
   return (

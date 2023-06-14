@@ -4,7 +4,8 @@ const Timer = ({ timer, label, handleTimer }) => {
       <div className="timer">
         <div id="timer-label">{label}</div>
         <div id="time-left">
-          {timer.min}:{timer.sec >= 10 ? "0" + timer.sec : timer.sec}
+          {timer.min < 10 ? "0" + timer.min : timer.min}:
+          {timer.sec < 10 ? "0" + timer.sec : timer.sec}
         </div>
       </div>
       <div className="timer-control">
