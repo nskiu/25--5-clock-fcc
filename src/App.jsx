@@ -5,7 +5,6 @@ import Timer from "./components/Timer";
 const App = () => {
   const [session, setSession] = useState(25);
   const [breaks, setBreaks] = useState(5);
-
   const [timer, setTimer] = useState({ min: 25, sec: 0, label: "Session" });
   const [active, setActive] = useState(false);
 
@@ -32,6 +31,7 @@ const App = () => {
         setBreaks((prev) => prev + 1);
         break;
       default:
+        console.log(event.target.id);
         console.log("Invalid Input");
         return;
     }
@@ -102,7 +102,12 @@ const App = () => {
         breaks={breaks}
         handleControls={handleControls}
       />
-      <Timer beep={beep} timer={timer} handleTimer={handleTimer} />
+      <Timer
+        active={active}
+        beep={beep}
+        timer={timer}
+        handleTimer={handleTimer}
+      />
     </div>
   );
 };

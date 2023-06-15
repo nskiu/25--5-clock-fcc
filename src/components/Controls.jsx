@@ -6,25 +6,37 @@ const Controls = ({ session, breaks, handleControls }) => {
         <div className="controls">
           <div id="break-label">Break Length</div>
           <div className="length-control">
-            <button id="break-decrement" onClick={handleControls}>
-              down
-            </button>
+            <i
+              className="fas fa-chevron-down"
+              id="break-decrement"
+              onClick={handleControls}
+            ></i>
+
             <div id="break-length">{breaks}</div>
-            <button id="break-increment" onClick={handleControls}>
-              up
-            </button>
+            <i
+              className="fas fa-chevron-up"
+              id="break-increment"
+              onClick={handleControls}
+            ></i>
           </div>
         </div>
         <div className="controls">
           <div id="session-label">Session Length</div>
           <div className="length-control">
-            <button id="session-decrement" onClick={handleControls}>
-              down
-            </button>
+            <i
+              className="fas fa-chevron-down"
+              id="session-decrement"
+              onClick={handleControls}
+            ></i>
             <div id="session-length">{session}</div>
-            <button id="session-increment" onClick={handleControls}>
-              up
-            </button>
+
+            <i
+              className="fas fa-chevron-up"
+              id="session-increment"
+              onClick={handleControls}
+            >
+              {" "}
+            </i>
           </div>
         </div>
       </div>

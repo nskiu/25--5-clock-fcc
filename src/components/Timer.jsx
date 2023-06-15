@@ -1,4 +1,4 @@
-const Timer = ({ beep, timer, handleTimer }) => {
+const Timer = ({ active, beep, timer, handleTimer }) => {
   return (
     <>
       <div className="timer">
@@ -9,12 +9,12 @@ const Timer = ({ beep, timer, handleTimer }) => {
         </div>
       </div>
       <div className="timer-control">
-        <button id="start_stop" onClick={handleTimer}>
-          start_stop
-        </button>
-        <button id="reset" onClick={handleTimer}>
-          reset
-        </button>
+        {active ? (
+          <i className="fas fa-pause" id="start_stop" onClick={handleTimer}></i>
+        ) : (
+          <i className="fas fa-play" id="start_stop" onClick={handleTimer}></i>
+        )}
+        <i className="fas fa-stop" id="reset" onClick={handleTimer}></i>
         <audio
           ref={beep}
           id="beep"

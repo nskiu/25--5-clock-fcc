@@ -1,0 +1,37 @@
+$bg-main: #dac4ff;
+
+body {
+  background-color: $bg-main;
+  color: #1f2933;
+}
+
+.one-min {
+  color: #ef4e4e;
+}
+.length-control {
+  i:hover {
+    color: #f5f7fa;
+  }
+}
+
+footer {
+  position: absolute;
+  display: flex;
+  width: 70%;
+  max-width: 500px;
+  text-align: center;
+  justify-content: center;
+  bottom: 60px;
+  flex-wrap: wrap;
+  p {
+    color: #040429;
+  }
+  a {
+    display: block;
+    color: #040429;
+  }
+
+  a:hover {
+    color: #f5f7fa;
+  }
+}
