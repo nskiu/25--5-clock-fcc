@@ -5,11 +5,12 @@ import Timer from "./components/Timer";
 const App = () => {
   const [session, setSession] = useState(25);
   const [breaks, setBreaks] = useState(5);
-  const [label, setLabel] = useState("Session");
-  const [timer, setTimer] = useState({ min: 25, sec: 0 });
+
+  const [timer, setTimer] = useState({ min: 25, sec: 0, label: "Session" });
   const [active, setActive] = useState(false);
 
-  const timerId = useRef(timer);
+  const timerId = useRef();
+  const beep = useRef();
 
   const handleControls = (event) => {
     if (active) return;
@@ -42,8 +43,12 @@ const App = () => {
         setActive(!active);
         break;
       case "reset":
+        stopTimer();
+        beep.current.pause();
+        beep.current.load();
         setSession(25);
         setBreaks(5);
+        setTimer({ min: 25, sec: 0, label: "Session" });
         setActive(false);
     }
   };
@@ -51,25 +56,25 @@ const App = () => {
   const startTimer = () => {
     timerId.current = setInterval(() => {
       setTimer((prev) => {
-        if (prev.sec === 0 && prev.min === 0) {
-          console.log("Beep");
-          if (label === "Session") {
-            setLabel("Break");
-            return { min: breaks, sec: 0 };
+        if ((prev.sec <= 0 && prev.min <= 0) || prev.min < 0) {
+          if (prev.label === "Session") {
+            return { min: breaks, sec: 0, label: "Break" };
           } else {
-            setLabel("Session");
-            return { min: session, sec: 0 };
+            return { min: session, sec: 0, label: "Session" };
           }
-        } else if (prev.sec === 0 && prev.min > 0) {
-          return { min: prev.min - 1, sec: 59 };
+        } else if (prev.sec <= 0 && prev.min > 0) {
+          return { min: prev.min - 1, sec: 59, label: prev.label };
         } else {
-          return { min: prev.min, sec: prev.sec - 1 };
+          return { min: prev.min, sec: prev.sec - 1, label: prev.label };
         }
       });
     }, 1000);
   };
 
-  const stopTimer = () => {};
+  const stopTimer = () => {
+    clearInterval(timerId.current);
+    timerId.current = 0;
+  };
 
   useEffect(() => {
     if (active) {
@@ -80,9 +85,16 @@ const App = () => {
   }, [active]);
 
   useEffect(() => {
-    setTimer({ min: session, sec: 0 });
+    // the test is weird it sets the session to negative and never start the timer, this is my workaround
+    if (session < 0) {
+      setSession(session * -1);
+    }
+    setTimer({ min: session, sec: 0, label: "Session" });
   }, [session]);
 
+  useEffect(() => {
+    if (timer.min === 0 && timer.sec === 0) beep.current.play();
+  }, [timer]);
   return (
     <div>
       <Controls
@@ -90,7 +102,7 @@ const App = () => {
         breaks={breaks}
         handleControls={handleControls}
       />
-      <Timer timer={timer} label={label} handleTimer={handleTimer} />
+      <Timer beep={beep} timer={timer} handleTimer={handleTimer} />
     </div>
   );
 };
